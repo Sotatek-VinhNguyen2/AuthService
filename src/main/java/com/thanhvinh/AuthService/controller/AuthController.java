@@ -36,9 +36,9 @@ public class AuthController {
     })
     @PostMapping("/generate-jwt")
     public ResponseEntity<JwtResponseDTO> generateJwt(@RequestBody UserDTO userDTO) {
-        log.info("generateJwt", userDTO.toString());
+        log.info("generateJwt: {}", userDTO.toString());
         String token = authService.generateToken(userDTO.getGmail());
-        log.info("Token: ", token);
+        log.info("Token: {}", token);
         return ResponseEntity.ok().body(new JwtResponseDTO(token));
     }
 
@@ -51,9 +51,9 @@ public class AuthController {
     })
     @PostMapping("/verify-jwt")
     public ResponseEntity<JwtVerifyDTO> verifyJwt(@RequestHeader("Authorization") String authHeader) {
-        log.info("verifyJwt", authHeader);
+        log.info("verifyJwt: {}", authHeader);
         String gmail = authService.getTokenFromRequest(authHeader);
-        log.info("Gmail: ", gmail);
+        log.info("Gmail: {}", gmail);
         return ResponseEntity.ok().body(new JwtVerifyDTO(gmail));
     }
 }

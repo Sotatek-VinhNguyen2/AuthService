@@ -18,14 +18,11 @@ import java.util.Date;
 @Service
 public class AuthService {
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private String secret = "8fc3012ccd7213c3b1ace5637a1e9916e644162c006cd1f534dcc5ece87c854d";
 
-    @Value("${jwt.expiration}")
-    private long jwtExpirationInMs;
+    private long jwtExpirationInMs = 86400000;
 
-    @Value("${jwt.prefix}")
-    private String prefix;
+    private String prefix = "Bearer ";
 
     public String generateToken(String email) {
         return Jwts.builder()
@@ -41,7 +38,7 @@ public class AuthService {
     }
 
     public String getTokenFromRequest(String authHeader) {
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith(prefix)) {
             return getEmailFromToken(authHeader.substring(7));
         } else {
             throw new JWTexception("Invalid JWT token");
@@ -65,6 +62,11 @@ public class AuthService {
             log.error("JWT claims string is empty");
             throw new JWTexception("JWT claims string is empty");
         }
+    }
+
+    public static void main(String[] args) {
+        AuthService authService = new AuthService();
+        System.out.println(authService.generateToken("admin@admin.com"));
     }
 
 }
